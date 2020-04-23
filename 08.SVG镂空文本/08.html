@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SVG镂空文本</title>
+  </head>
+  <body>
+    <div class="page">
+      <input
+        id="inputText"
+        class="input-text"
+        type="text"
+        name="firstname"
+        value=""
+        onkeyup="inputUp()"
+        maxlength="10"
+        placeholder="可以在input里面输入内容"
+      />
+      <div class="bg-color"></div>
+      <svg
+        class="svg"
+        viewbox="0 0 100% 100%"
+        preserveAspectRadio="xMidYmid slice"
+      >
+        <defs>
+          <mask id="mask" x="0" y="0" width="100%" height="100%">
+            <rect
+              class="mask-rect"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+            ></rect>
+            <text id="maskText" class="mask-text" x="50%" y="60%">
+              可以在input里面输入内容
+            </text>
+          </mask>
+        </defs>
+        <rect class="svg-rect" x="0" y="0" width="100%" height="100%"></rect>
+      </svg>
+    </div>
+  </body>
+  <style>
+    .input-text {
+      position: absolute;
+      width: 40vw;
+      height: 10vw;
+      font-size: 3vw;
+      line-height: 100px;
+      background-color: #000000;
+      color: #ffffff;
+      z-index: 80;
+      border-radius: 50px;
+      padding: 0 50px;
+      bottom: 5vh;
+    }
+    .page {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .bg-color {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-image: url(banner3.png);
+      background-size: 100% 100%;
+    }
+    .svg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .mask-rect {
+      fill: rgb(240, 240, 240);
+    }
+    .mask-text {
+      font-size: 5vw;
+      font-weight: 900;
+      text-anchor: middle;
+      fill: black;
+    }
+    .svg-rect {
+      fill: rgb(199, 199, 199);
+      mask: url(#mask);
+    }
+  </style>
+  <script type="text/javascript">
+    function inputUp() {
+      let input = document.getElementById("inputText").value;
+      document.getElementById("maskText").innerHTML = input;
+    }
+    // window.setInterval(changeText, 1000);
+    function changeText() {
+      console.log(`123`);
+      let input = document.getElementById("inputText").value;
+      //   let text = document.getElementById("maskText");
+      //   text.setAttribute("value", 0);
+      document.getElementById("maskText").innerHTML = input;
+    }
+  </script>
+</html>
