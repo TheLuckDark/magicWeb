@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>弹弹球</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="canvas"></canvas>
+  </body>
+  <script type="text/javascript">
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // 获取视口宽高
+    const vpw = document.documentElement.clientWidth;
+    const vph = document.documentElement.clientHeight;
+
+    canvas.width = vpw;
+    canvas.height = vph;
+    var chars = ["-0", "1"];
+
+    function generateMixed(n) {
+      var res = "";
+      for (var i = 0; i < n; i++) {
+        var id = Math.ceil(Math.random() * 1);
+        res += chars[id];
+      }
+      return res;
+    }
+    class Ball {
+      radius = 5; // 球的大小
+      color = "#f00"; // 球的颜色
+      speedX =
+        parseInt(Math.random() * 5 + 1) *
+        Math.pow(-1, parseInt(Math.random() * 10)); // 球的 x 轴移动方向与速度
+      speedY =
+        parseInt(Math.random() * 5 + 1) *
+        Math.pow(-1, parseInt(Math.random() * 10)); // 球的 y 轴移动方向与速度
+      constructor(x, y) {
+        this.x = x; // 球的初始 x 轴坐标，由鼠标点击位置决定
+        this.y = y; // 球的初始 y 轴坐标，由鼠标点击位置决定
+      }
+      move() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+      }
+      render(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    // 存放球的实例
+    var ballArr = [];
+    canvas.onclick = e => {
+      ballArr.push(new Ball(e.pageX, e.pageY));
+      // 定时删除球创建的球
+      var t = setTimeout(() => {
+        ballArr.shift();
+        clearTimeout(t);
+      }, 5000);
+    };
+
+    // 自执行动画
+    !(function createBall() {
+      ctx.clearRect(0, 0, vpw, vph);
+      ballArr.forEach(value => {
+        // 碰撞检测
+        if (value.x - value.radius < 0 || value.x + value.radius > vpw) {
+          value.speedX = -value.speedX;
+        }
+        if (value.y - value.radius < 0 || value.y + value.radius > vph) {
+          value.speedY = -value.speedY;
+        }
+        value.render(ctx);
+        value.move();
+      });
+      requestAnimationFrame(createBall);
+    })();
+  </script>
+</html>

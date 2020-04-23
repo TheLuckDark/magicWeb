@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>弹弹球</title>
+  </head>
+
+  <body id="body">
+    <div id="ballAuth">
+      <!-- <div class="ball0 ball"></div> -->
+    </div>
+  </body>
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    .ball {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #ff0a0a;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+    }
+  </style>
+  <script src="js/jquery-1.12.4.js"></script>
+  <script type="text/javascript">
+    jQuery(function($) {
+      function randomColor(len) {
+        len = len || 6;
+        var colorChars = "0123456789abcdef";
+        var maxPos = colorChars.length;
+        var color = "#";
+        for (i = 0; i < len; i++) {
+          color += colorChars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return color;
+      }
+      function RandomNumBoth(Min, Max) {
+        var Range = Max - Min;
+        var Rand = Math.random();
+        var num = Min + Math.round(Rand * Range); //四舍五入
+        if (num == 0) {
+          num = 5;
+        }
+        return num;
+      }
+
+      let ballArray = new Array();
+      let num = 0;
+      $("body").on("click", fun);
+      function fun(e) {
+        num = num + 1;
+        var frameDiv = document.createElement("div"); //创建一个标签
+        var y = e.clientY;
+        var x = e.clientX;
+        let color = randomColor(6);
+        console.log(color);
+        let numberVx = RandomNumBoth(-5, 5);
+        let numberVy = RandomNumBoth(-5, 5);
+        let move = `left:${x}px;top:${y}px;background:${color}`;
+        frameDiv.className = `ball${num} ball`;
+        frameDiv.style = move;
+        document.getElementById("ballAuth").appendChild(frameDiv);
+        let newball = new Object();
+        newball = {
+          name: `ball${num}`,
+          vx: numberVx,
+          vy: numberVy
+        };
+        ballArray.push(newball);
+        console.log(ballArray);
+      }
+      window.setInterval(move, 1000 / 100);
+      var $win = $(window),
+        r = 30,
+        maxWidth = $win.width() - r,
+        maxHeight = $win.height() - r;
+      function move() {
+        for (let idx = 0; idx < ballArray.length; idx++) {
+          let $ball = $(`.${ballArray[idx].name}`);
+          let posX = parseInt($ball.css("left"));
+          let posY = parseInt($ball.css("top"));
+          posX += ballArray[idx].vx;
+          posY += ballArray[idx].vy;
+          if (posX > maxWidth) {
+            posX = maxWidth;
+            ballArray[idx].vx = -ballArray[idx].vx;
+          } else if (posX < 0) {
+            posX = 0;
+            ballArray[idx].vx = -ballArray[idx].vx;
+          }
+          if (posY > maxHeight) {
+            posY = maxHeight;
+            ballArray[idx].vy = -ballArray[idx].vy;
+          } else if (posY < 0) {
+            posY = 0;
+            ballArray[idx].vy = -ballArray[idx].vy;
+          }
+          $ball.css({
+            left: posX + "px",
+            top: posY + "px"
+          });
+        }
+      }
+    });
+  </script>
+</html>
