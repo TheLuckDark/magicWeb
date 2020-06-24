@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Canvas 水纹加载动画</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="1000" height="600"></canvas>
+  </body>
+  <script type="text/javascript">
+    let canvas,
+      canvasLoad,
+      circleThick = 15,
+      loadSpeed = 1,
+      curValue = 0,
+      R = 80,
+      fi = 0,
+      fiSpeed = Math.PI / 10,
+      w = (4 * Math.PI) / (3 * R),
+      timeSet;
+    init();
+    function init() {
+      canvas = document.getElementById("canvas");
+      canvasLoad = canvas.getContext("2d");
+      window.onresize = resize;
+      resize();
+      render();
+      timeSet = setInterval(render, 30);
+    }
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    function render() {
+      curValue += loadSpeed;
+      if (curValue == 100) {
+        // curValue = 0;
+        // fi = 0;
+        clearInterval(timeSet);
+      }
+      renderBG();
+      renderCircle();
+      renderWave();
+      renderText();
+    }
+    function renderBG() {
+      canvasLoad.clearRect(0, 0, canvas.width, canvas.height);
+      canvasLoad.strokeRect(0, 0, canvas.width, canvas.height);
+    }
+    function renderCircle() {
+      canvasLoad.save();
+      let angle = (curValue / 100) * Math.PI * 2;
+      canvasLoad.lineWidth = circleThick;
+      canvasLoad.beginPath();
+      canvasLoad.arc(
+        canvas.width / 2,
+        canvas.height / 2,
+        R,
+        -Math.PI / 2,
+        angle - Math.PI / 2,
+        false
+      );
+      canvasLoad.strokeStyle = "rgb(0, 255, 76)";
+      canvasLoad.stroke();
+      canvasLoad.restore();
+    }
+    function renderText() {
+      canvasLoad.save();
+      canvasLoad.fillStyle = "orange";
+      canvasLoad.textAlign = "center";
+      canvasLoad.textBaseline = "middle";
+      canvasLoad.font = "30px impact";
+      canvasLoad.fillText(curValue + "%", canvas.width / 2, canvas.height / 2);
+      canvasLoad.restore();
+    }
+    function renderWave() {
+      canvasLoad.save();
+      setCircleClip();
+      fi += fiSpeed;
+      drawWave(6, -w, fi, "rgba(0, 255, 76,0.9)");
+      drawWave(8, w, fi, "rgba(0,255,76,0.5)");
+      canvasLoad.restore();
+    }
+
+    function setCircleClip() {
+      canvasLoad.beginPath();
+      canvasLoad.arc(
+        canvas.width / 2,
+        canvas.height / 2,
+        R - (circleThick / 3) * 2,
+        0,
+        Math.PI * 2,
+        false
+      );
+      canvasLoad.clip();
+    }
+    function drawWave(a, w, fi, color) {
+      let i, x, y, sx, sy;
+      canvasLoad.lineWidth = 1;
+      canvasLoad.strokeStyle = "black";
+      canvasLoad.fillStyle = color;
+      canvasLoad.beginPath();
+      sx = canvas.width / 2 - R;
+      sy = canvas.height / 2 + R;
+      canvasLoad.moveTo(sx, sy);
+      canvasLoad.lineTo(sx, sy - (curValue / 100) * 2 * R);
+      for (i = 0; i < R * 2; ++i) {
+        x = sx + i;
+        y = a * Math.sin(w * i + fi) + sy - (curValue / 100) * 2 * R;
+        canvasLoad.lineTo(x, y);
+      }
+      canvasLoad.lineTo(sx + 2 * R, sy);
+      canvasLoad.closePath();
+      canvasLoad.fill();
+    }
+  </script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      font-size: 100px;
+      background-color: #000000;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #canvas {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</html>
