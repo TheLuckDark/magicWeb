@@ -8,9 +8,9 @@
 
 [09.svg文字路径动画](https://theluckdark.github.io/magicWeb/09.svg%e6%96%87%e5%ad%97%e8%b7%af%e5%be%84%e5%8a%a8%e7%94%bb/index.html)
 
-[16.让图中的水面动起来](https://theluckdark.github.io/magicWeb/16.%e8%ae%a9%e5%9b%be%e4%b8%ad%e7%9a%84%e6%b0%b4%e9%9d%a2%e5%8a%a8%e8%b5%b7%e6%9d%a5/langShadow.html)
+[16.让图中的水面动起来](https://theluckdark.github.io/magicWeb/16.%e8%ae%a9%e5%9b%be%e4%b8%ad%e7%9a%84%e6%b0%b4%e9%9d%a2%e5%8a%a8%e8%b5%b7%e6%9d%a5/watermove.html)
 
-[28.长阴影](https://theluckdark.github.io/magicWeb/28.%e9%95%bf%e9%98%b4%e5%bd%b1/watermove.html)
+[28.长阴影](https://theluckdark.github.io/magicWeb/28.%e9%95%bf%e9%98%b4%e5%bd%b1/langShadow.html)
 
 [41.初识canvas1](https://theluckdark.github.io/magicWeb/41.%e5%88%9d%e8%af%86canvas/canvas/canvas.html)
 [41.初识canvas2](https://theluckdark.github.io/magicWeb/41.%e5%88%9d%e8%af%86canvas/canvasCircle/canvasCircle.html)
