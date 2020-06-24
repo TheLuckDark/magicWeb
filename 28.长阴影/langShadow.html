@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" /> -->
+    <title>长阴影</title>
+  </head>
+  <body>
+    <div class="shadow-page">
+      <div class="name-container">
+        <div class="name">Z</div>
+        <div class="name">H</div>
+        <div class="name">A</div>
+        <div class="name">N</div>
+        <div class="name">G</div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    let mouseX = 0;
+    let mouseY = 0;
+    let sin = 0;
+    let cos = 0;
+    let tan = 0;
+    let lastTime = 0;
+    let distanceX = 0;
+    let distanceY = 0;
+    let bevel = 0;
+    // 监听鼠标移动事件
+    document.onmousemove = function (e) {
+      if (Date.now() - lastTime > 16) {
+        lastTime = Date.now();
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        shadowMove();
+      }
+    };
+    function shadowMove() {
+      distanceX = document.body.clientWidth / 2 - mouseX;
+      distanceY = document.body.clientHeight / 2 - mouseY;
+      bevel = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+      tan = distanceY / distanceX;
+      sin = distanceY / bevel;
+      cos = distanceX / bevel;
+      let shadowCss = "";
+      for (let i = 1; i < 18; i++) {
+        if (i == 17) {
+          shadowCss += `${i * 3 * cos}px ${i * 3 * sin}px 0 #530000`;
+        } else {
+          shadowCss += `${i * 3 * cos}px ${i * 3 * sin}px 0 #530000,`;
+        }
+      }
+      $(".name").css({ "text-shadow": shadowCss });
+    }
+
+    // document.getElementById("text1").style.textShadow = shadowCss;
+    // document.getElementById("text2").style.textShadow = shadowCss;
+    // document.getElementById("text3").style.textShadow = shadowCss;
+    // document.getElementById("text4").style.textShadow = shadowCss;
+    // document.getElementById("text5").style.textShadow = shadowCss;
+  </script>
+  <script src="jquery-1.12.4.js"></script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      background-color: #000000;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .shadow-page {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: hidden;
+    }
+
+    .name-container {
+      width: 100vw;
+      height: 10vw;
+      position: absolute;
+      left: 0;
+      top: calc(50vh - 5vw);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .name {
+      width: 10vw;
+      height: 10vw;
+      background-color: #003304;
+      border-radius: 10px;
+      margin-right: 1vw;
+      text-align: center;
+      line-height: 10vw;
+      font-size: 5vw;
+      font-weight: bold;
+      color: rgb(153, 0, 0);
+      text-shadow: 1px 1px 0 #530000, 2px 2px 0 #530000, 3px 3px 0 #530000,
+        4px 4px 0 #530000, 5px 5px 0 #530000, 6px 6px 0 #530000,
+        7px 7px 0 #530000, 8px 8px 0 #530000, 9px 9px 0 #530000,
+        10px 10px 0 #530000, 11px 11px 0 #530000, 12px 12px 0 #530000,
+        13px 13px 0 #530000, 14px 14px 0 #530000, 15px 15px 0 #530000,
+        16px 16px 0 #530000, 17px 17px 0 #530000;
+    }
+  </style>
+</html>

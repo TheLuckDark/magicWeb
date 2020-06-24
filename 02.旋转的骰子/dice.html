@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>旋转的筛子1</title>
+  </head>
+  <body>
+    <div class="dice">
+      <div class="vertical" id="vertical1">
+        <div class="horizontal" id="horizontal1">
+          <div class="cube">
+            <div class="face front one">
+              <div class="dot"></div>
+            </div>
+            <div class="face backt two">
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            <div class="face up three">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            <div class="face down four">
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+            <div class="face left five">
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="dot-row">
+                <div class="dot"></div>
+              </div>
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+            <div class="face right six">
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              <div class="dot-row">
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+            <div class="axis-face x"></div>
+            <div class="axis-face y"></div>
+            <div class="axis-face z"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    let startX;
+    let startY;
+    let endX;
+    let endY;
+    let rotateMoveX = 0;
+    let rotateMoveXOld = 0;
+    let rotateMoveY = 0;
+    let rotateMoveYOld = 0;
+    let windowWidth = document.body.clientWidth;
+    let windowHeight = document.body.clientHeight;
+    //手指接触屏幕
+    document.addEventListener(
+      "touchstart",
+      function (e) {
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
+        document.addEventListener("touchmove", touchmoveHandler);
+      },
+      false
+    );
+    //鼠标点击屏幕
+    document.addEventListener(
+      "mousedown",
+      function (e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        document.addEventListener("mousemove", mousemoveHandler);
+      },
+      false
+    );
+    //手指滑动屏幕
+    function touchmoveHandler(e) {
+      endX = e.changedTouches[0].pageX;
+      endY = e.changedTouches[0].pageY;
+      let moveX;
+      let moveY;
+      moveX = endX - startX;
+      moveY = -(endY - startY);
+      let rotateMoveXNow = (moveX / windowWidth) * 3 * 360;
+      rotateMoveX = parseInt(rotateMoveXOld + rotateMoveXNow);
+      let rotateMoveYNow = (moveY / windowWidth) * 3 * 360;
+      rotateMoveY = parseInt(rotateMoveYOld + rotateMoveYNow);
+      document.getElementById(
+        "horizontal1"
+      ).style.transform = `rotateY(${rotateMoveX}deg) rotateX(${rotateMoveY}deg)`;
+      // document.getElementById(
+      //   "vertical1"
+      // ).style.transform = `rotateX(${rotateMoveY}deg)`;
+    }
+    //鼠标滑动屏幕
+    function mousemoveHandler(e) {
+      endX = e.clientX;
+      endY = e.clientY;
+      let moveX;
+      let moveY;
+      moveX = endX - startX;
+      moveY = -(endY - startY);
+      let rotateMoveXNow = (moveX / windowWidth) * 3 * 360;
+      rotateMoveX = parseInt(rotateMoveXOld + rotateMoveXNow);
+      let rotateMoveYNow = (moveY / windowWidth) * 3 * 360;
+      rotateMoveY = parseInt(rotateMoveYOld + rotateMoveYNow);
+      document.getElementById(
+        "horizontal1"
+      ).style.transform = `rotateY(${rotateMoveX}deg) rotateX(${rotateMoveY}deg)`;
+    }
+    //手指离开屏幕
+    document.addEventListener(
+      "touchend",
+      function (e) {
+        rotateMoveXOld = rotateMoveX % 360;
+        rotateMoveYOld = rotateMoveY % 360;
+        document.removeEventListener("touchmove", touchmoveHandler);
+      },
+      false
+    );
+    //鼠标松开点击
+    document.addEventListener(
+      "mouseup",
+      function (e) {
+        rotateMoveXOld = rotateMoveX % 360;
+        rotateMoveYOld = rotateMoveY % 360;
+        document.removeEventListener("mousemove", mousemoveHandler);
+      },
+      false
+    );
+  </script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      font-size: 100px;
+      background-color: #000000;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .dice {
+      width: 10vw;
+      height: 10vw;
+    }
+    .cube {
+      position: relative;
+      width: 10vw;
+      height: 10vw;
+      transform-style: preserve-3d;
+      /* transform: rotateX(-45deg) rotateY(45deg); */
+    }
+    .face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10vw;
+      height: 10vw;
+      box-sizing: border-box;
+      padding: 1.5vw;
+      background-color: #ffffff;
+      border-radius: 40%;
+      box-shadow: 0 0 2vw #cccccc inset;
+      display: flex;
+      transform-style: preserve-3d;
+    }
+    .face ::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10vw;
+      height: 10vw;
+      content: "";
+      display: block;
+      border-radius: 2vw;
+      transform: translateZ(-0.1px);
+      background-color: #e0e0e0;
+    }
+    .dot {
+      flex-shrink: 0;
+      width: 2vw;
+      height: 2vw;
+      display: inline-block;
+      background: rgb(44, 44, 44);
+      border-radius: 50%;
+      box-shadow: inset 0.1vw 0.1vw 0.3vw rgb(255, 255, 255);
+    }
+    .one {
+      align-items: center;
+      justify-content: center;
+    }
+    .two {
+      align-items: flex-start;
+      justify-content: space-around;
+    }
+    .two .dot:nth-child(2) {
+      align-self: flex-end;
+    }
+    .three {
+      align-items: flex-start;
+      justify-content: space-around;
+    }
+    .three .dot:nth-child(2) {
+      align-self: center;
+    }
+    .three .dot:nth-child(3) {
+      align-self: flex-end;
+    }
+    .four {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .dot-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .five {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .five .dot-row:nth-child(2) {
+      justify-content: center;
+    }
+    .six {
+      flex-direction: row;
+      justify-content: space-around;
+    }
+    .six .dot-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    .front {
+      transform: translateZ(5vw);
+    }
+    .backt {
+      transform: translateZ(-5vw) rotateY(180deg);
+    }
+    .up {
+      transform: translateY(-50%) rotateX(90deg);
+    }
+    .down {
+      transform: translateY(50%) rotateX(-90deg);
+    }
+    .left {
+      transform: translateX(-50%) rotateY(-90deg);
+    }
+    .right {
+      transform: translateX(50%) rotateY(90deg);
+    }
+    .axis-face {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: #e0e0e0;
+      width: 10vw;
+      height: 10vw;
+    }
+    .axis-face.x {
+      transform: rotateY(90deg);
+    }
+    .axis-face.y {
+      transform: rotateX(90deg);
+    }
+    .vertical {
+      /* animation: rotateX 5s infinite linear; */
+      transform-style: preserve-3d;
+    }
+    .horizontal {
+      /* animation: rotateY 5s infinite linear; */
+      transform-style: preserve-3d;
+    }
+    @keyframes rotateY {
+      from {
+        transform: rotateY(0);
+      }
+      to {
+        transform: rotateY(360deg);
+      }
+    }
+    @keyframes rotateX {
+      from {
+        transform: rotateX(0);
+      }
+      to {
+        transform: rotateX(360deg);
+      }
+    }
+  </style>
+</html>
