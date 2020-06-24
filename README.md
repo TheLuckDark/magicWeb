@@ -15,3 +15,5 @@
 [41.初识canvas1](https://theluckdark.github.io/magicWeb/41.%e5%88%9d%e8%af%86canvas/canvas/canvas.html)
 [41.初识canvas2](https://theluckdark.github.io/magicWeb/41.%e5%88%9d%e8%af%86canvas/canvasCircle/canvasCircle.html)
 [41.初识canvas3](https://theluckdark.github.io/magicWeb/41.%e5%88%9d%e8%af%86canvas/canvasText/canvasText.html)
+
+[42.canvas绘画基础](https://theluckdark.github.io/magicWeb/42.canvas%e7%bb%98%e7%94%bb%e5%9f%ba%e7%a1%80/canvas.html)
