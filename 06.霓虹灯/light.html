@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>霓虹灯</title>
+  </head>
+  <body>
+    <input id="id-switch" type="checkbox" />
+    <label class="switch" for="id-switch"></label>
+    <text class="neon neon1">猜</text>
+    <text class="neon neon2">猜</text>
+    <text class="neon neon3">我</text>
+    <text class="neon neon4">是</text>
+    <text class="neon neon5">谁</text>
+    <text class="neon neon6">？</text>
+  </body>
+  <script type="text/javascript"></script>
+  <style>
+    @font-face {
+      font-family: Pacifico;
+      src: url(hanchan.ttf);
+    }
+    body,
+    html,
+    p,
+    h1,
+    div,
+    span,
+    i,
+    b,
+    ul,
+    ol,
+    li {
+      margin: 0;
+      padding: 0;
+    }
+    ul,
+    ul,
+    li {
+      list-style: none;
+    }
+    a {
+      text-decoration: none;
+    }
+    html {
+      font-family: "Pacifico", sans-serif;
+      font-size: 100px;
+    }
+    body {
+      color: white;
+      background-color: black;
+      font-family: "Pacifico", sans-serif;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+    input {
+      display: none;
+    }
+    .neon {
+      font-size: 1rem;
+      color: #ff5722;
+    }
+    .neon1 {
+      animation: neon-off 1s 1.1s both,
+        neon-off-color 1.5s 1.1s ease-out backwards;
+    }
+    .neon2 {
+      animation: neon-off 1s 0.9s both,
+        neon-off-color 1.5s 0.9s ease-out backwards;
+    }
+    .neon3 {
+      animation: neon-off 1s 0.8s both,
+        neon-off-color 1.5s 0.8s ease-out backwards;
+    }
+    .neon4 {
+      animation: neon-off 1s 0.7s both,
+        neon-off-color 1.5s 0.7s ease-out backwards;
+    }
+    .neon5 {
+      animation: neon-off 1s 0.6s both,
+        neon-off-color 1.5s 0.6s ease-out backwards;
+    }
+    .neon6 {
+      animation: neon-off 1s 0.5s both,
+        neon-off-color 1.5s 0.5s ease-out backwards;
+    }
+    input:checked ~ .neon1 {
+      animation: neon-on 2s 0.5s ease-in-out infinite alternate,
+        neon-on-color 1s 0.5s ease-out forwards;
+    }
+    input:checked ~ .neon2 {
+      animation: neon-on 2s 0.6s ease-in-out infinite alternate,
+        neon-on-color 1s 0.6s ease-out forwards;
+    }
+    input:checked ~ .neon3 {
+      animation: neon-on 2s 0.7s ease-in-out infinite alternate,
+        neon-on-color 1s 0.7s ease-out forwards;
+    }
+    input:checked ~ .neon4 {
+      animation: neon-on 2s 0.8s ease-in-out infinite alternate,
+        neon-on-color 1s 0.8s ease-out forwards;
+    }
+    input:checked ~ .neon5 {
+      animation: neon-on 2s 0.9s ease-in-out infinite alternate,
+        neon-on-color 1s 0.9s ease-out forwards;
+    }
+    input:checked ~ .neon6 {
+      animation: neon-on 2s 1.1s ease-in-out infinite alternate,
+        neon-on-color 1s 1.1s ease-out forwards;
+    }
+
+    .switch {
+      font-size: 0.5rem;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      width: 4em;
+      height: 1.6em;
+      border-radius: 2em;
+      border: 0.04em solid silver;
+      box-shadow: 1px 1px 2px #211 inset, 2px 2px 4px #322 inset,
+        3px 3px 6px #544 inset;
+      background: repeating-linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.3) 25%,
+            transparent 25%,
+            transparent 50%
+          )
+          center/5px 5px,
+        linear-gradient(90deg, red 50%, black 50%) -3.2em /200% 100% no-repeat;
+      transition: background-position 0.5s;
+    }
+    input:checked ~ .switch {
+      background-position: -0.8em;
+      transition: background-position 0.5s;
+    }
+
+    .switch::before {
+      content: "";
+      display: block;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+
+      position: absolute;
+      top: calc(50% - 0.75em);
+      left: 1%;
+
+      box-shadow: 1px 1px 1px #555, 2px 2px 1px #444, 3px 3px 1px #333,
+        5px 5px 10px black;
+      background-image: radial-gradient(
+          ellipse 8% 50% at 50% 0%,
+          hsla(0, 0%, 100%, 0.5) 0%,
+          hsla(0, 0%, 100%, 0) 100%
+        ),
+        radial-gradient(
+          ellipse 12% 50% at 50% 100%,
+          hsla(0, 0%, 100%, 0.6) 0,
+          hsla(0, 0%, 100%, 0) 100%
+        ),
+        radial-gradient(
+          ellipse 50% 7% at 0 50%,
+          hsla(0, 0%, 100%, 0.5) 0,
+          hsla(0, 0%, 100%, 0) 100%
+        ),
+        radial-gradient(
+          ellipse 50% 5% at 100% 50%,
+          hsla(0, 0%, 100%, 0.5) 0,
+          hsla(0, 0%, 100%, 0) 100%
+        ),
+        repeating-radial-gradient(
+          100% 100% at 50% 50%,
+          hsla(0, 0%, 0%, 0) 0%,
+          hsla(0, 0%, 0%, 0) 7%,
+          hsla(0, 0%, 0%, 0.1) 8.5%
+        ),
+        repeating-radial-gradient(
+          100% 100% at 50% 50%,
+          hsla(0, 0%, 100%, 0) 0%,
+          hsla(0, 0%, 100%, 0) 15%,
+          hsla(0, 0%, 100%, 0.1) 18%
+        ),
+        repeating-radial-gradient(
+          100% 100% at 50% 50%,
+          hsla(0, 0%, 100%, 0) 0%,
+          hsla(0, 0%, 100%, 0) 3%,
+          hsla(0, 0%, 100%, 0.2) 4%
+        ),
+        radial-gradient(
+          200% 50% at 50% 50%,
+          hsla(0, 0%, 90%, 1) 5%,
+          hsla(0, 0%, 85%, 1) 30%,
+          hsla(0, 0%, 60%, 1) 100%
+        );
+      transform: rotate(5deg);
+      transition: left 0.5s, transform 0.8s;
+    }
+    input:checked + .switch::before {
+      left: calc(99% - 1.5em);
+      transform: rotate(15deg);
+      transition: left 0.5s, transform 0.8s;
+    }
+
+    @keyframes neon-on-color {
+      to {
+        color: white;
+      }
+    }
+    @keyframes neon-off-color {
+      from {
+        color: white;
+      }
+    }
+
+    @keyframes neon-off {
+      from {
+        text-shadow: 0 0 8px #fff, 0 0 15px #fff, 0 0 25px #fff,
+          0 0 30px #ff5722, 0 0 50px #ff5722, 0 0 60px #ff5722, 0 0 80px #ff5722,
+          0 0 90px #ff5722;
+      }
+      to {
+        text-shadow: none;
+      }
+    }
+
+    @keyframes neon-on {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+          0 0 40px #ff5722, 0 0 70px #ff5722, 0 0 80px #ff5722,
+          0 0 100px #ff5722, 0 0 150px #ff5722;
+      }
+      to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff,
+          0 0 20px #ff5722, 0 0 35px #ff5722, 0 0 40px #ff5722, 0 0 50px #ff5722,
+          0 0 75px #ff5722;
+      }
+    }
+  </style>
+</html>
