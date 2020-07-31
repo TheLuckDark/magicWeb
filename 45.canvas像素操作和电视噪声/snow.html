@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>canvas雪花</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="foot-left"></div>
+      <div class="foot-right"></div>
+      <div class="tv-container">
+        <div class="tv-control">
+          <div class="control-light" id="control"></div>
+        </div>
+        <div class="tv-body"></div>
+      </div>
+      <canvas id="canvas" class="tv-canvas"></canvas>
+      <image src="mi.png" class="mi-logo" id="miLogo"></image>
+    </div>
+  </body>
+  <script src="jquery-1.12.4.js"></script>
+  <script type="text/javascript">
+    let canvas;
+    let ctx;
+    let data;
+    let w;
+    let h;
+    let text = "欢迎观看小米电视机";
+    let index = 0;
+    let offsetX = 10;
+    let showTv = false;
+    init();
+    function init() {
+      canvas = document.getElementById("canvas");
+      ctx = canvas.getContext("2d");
+      window.onresize = resize;
+      resize();
+      noise();
+      $("#control").click(function () {
+        chagneTv();
+      });
+    }
+    function chagneTv() {
+      showTv = !showTv;
+      if (showTv) {
+        $("#miLogo").hide();
+      } else {
+        $("#miLogo").show();
+      }
+    }
+    function resize() {
+      w = canvas.width = window.innerWidth * 0.58;
+      h = canvas.height = window.innerWidth * 0.33;
+      data = ctx.createImageData(w, h);
+    }
+    function noise() {
+      ctx.clearRect(0, 0, w, h);
+      if (showTv) {
+        drawText();
+        window.requestAnimationFrame(noise);
+        return;
+      }
+      var i,
+        buff = data.data,
+        n = buff.length;
+      for (i = 0; i < n; i += 4) {
+        buff[i] = buff[i + 1] = buff[i + 2] = randomInt(0, 255);
+        buff[i + 3] = 255;
+      }
+      ctx.putImageData(data, 0, 0);
+      window.requestAnimationFrame(noise);
+    }
+    function drawText() {
+      var i,
+        rectH = [h / 2 - 100, h / 2 + 100];
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = `${(w / 100) * 6}px impact`;
+      for (i = 0; i < 6; ++i) {
+        rectH.push(randomInt(rectH[0], rectH[rectH.length - 1]));
+      }
+      rectH.sort();
+      for (i = 0; i < rectH.length - 1; ++i) {
+        drawTextInRect(rectH[i], rectH[i + 1]);
+      }
+    }
+    function drawTextInRect(top, bottom) {
+      var offsetX = randomInt(-3, 3);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, top, w, bottom - top);
+      ctx.clip();
+      ctx.fillText(text, w / 2 + offsetX, h / 2);
+      ctx.restore();
+    }
+    function randomInt(min, max) {
+      return Math.round(randomFloat(min, max));
+    }
+    function randomFloat(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+  </script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      font-size: 100px;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .page-container {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    .tv-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+    .tv-canvas {
+      position: absolute;
+      width: 58vw;
+      height: 33vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 0.5vw;
+    }
+    .tv-body {
+      position: absolute;
+      width: 60vw;
+      height: 35vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1a1a1a;
+      border-radius: 0.5vw;
+    }
+    .tv-control {
+      position: absolute;
+      width: 14vw;
+      height: 2vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 16.5vw);
+      background-color: #3a3a3a;
+      border-radius: 0.5vw;
+    }
+    .control-light {
+      position: absolute;
+      width: 1vw;
+      height: 0.4vw;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 0.2vw);
+      background-color: #ff0000;
+      border-radius: 0.2vw;
+      animation: lightShow 2s infinite;
+    }
+    @keyframes lightShow {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    .foot-left {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-24vw, 17vw) rotate(6deg);
+      height: 0;
+      width: 1vw;
+      border-top: 4vw solid #222222;
+      border-right: 1vw solid transparent;
+    }
+    .foot-right {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(22vw, 17vw) rotate(-6deg);
+      height: 0;
+      width: 1vw;
+      border-top: 4vw solid #222222;
+      border-left: 1vw solid transparent;
+    }
+    .mi-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5vw;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</html>
