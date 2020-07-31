@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>css滤镜</title>
+  </head>
+  <body>
+    <div class="pic">
+      <img src="./luck.jpg" />
+    </div>
+    <div class="filters">
+      <label>
+        <input class="filter" type="range" filter="blur" unit="px" min="0" max="20" value="0" step="1" />
+        <span>blur(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="grayscale" unit="" min="0" max="1" value="0" step=".1" />
+        <span>grayscale(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="sepia" unit="" min="0" max="1" value="0" step=".1" />
+        <span>sepia(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="brightness" unit="" min="0" max="10" value="1" step=".1" />
+        <span>brightness(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="contrast" unit="" min="0" max="2" value="1" step=".1" />
+        <span>contrast(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="hue-rotate" unit="deg" min="0" max="360" value="0" step="1" />
+        <span>hue-rotate(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="invert" unit="" min="0" max="2" value="0" step=".1" />
+        <span>invert(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="saturate" unit="" min="0" max="5" value="1" step=".1" />
+        <span>saturate(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="opacity" unit="" min="0" max="1" value="1" step=".1" />
+        <span>opacity(0)</span>
+      </label>
+      <label>
+        <input class="filter" type="range" filter="drop-shadow" unit="px" min="0" max="50" value="0" step="1" />
+        <span>drop-shadow(0)</span>
+      </label>
+    </div>
+    <div class="mix-container">
+      <div class="background-blend exchange"></div>
+      <div class="mix-blend exchange">
+				<img alt="bg" class="mix-first" src="bg.png"/>
+				<img alt="deer" class="mix-last" src="luck.jpg"/>
+			</div>
+    </div>
+    <div class="mix-text">normal</div>
+    <div class="button-container">
+      <div class="mix-btn">darken</div>
+      <div class="mix-btn">lighten</div>
+      <div class="mix-btn">multiply</div>
+      <div class="mix-btn">screen</div>
+      <div class="mix-btn">color-dodge</div>
+      <div class="mix-btn">color-burn</div>
+      <div class="mix-btn">overlay</div>
+      <div class="mix-btn">hard-light</div>
+      <div class="mix-btn">soft-light</div>
+      <div class="mix-btn">difference</div>
+      <div class="mix-btn">exclusion</div>
+      <div class="mix-btn">hue</div>
+      <div class="mix-btn">saturation</div>
+      <div class="mix-btn">color</div>
+      <div class="mix-btn">luminosity</div>
+    </div>
+
+      <img src="./yuntai.jpg" class="draw-img" />
+  </body>
+  <script src="jquery-1.12.4.js"></script>
+  <script type="text/javascript">
+  jQuery(function($){
+
+    let $target= $(".pic img");
+       let $filter_map={};
+
+    $(".filters").on('input',oninput);
+    $(".filter").each(function(){
+      init($(this));
+    });
+
+    function init($this){
+      $this.fName = $this.attr('filter');
+      $this.fTextEle=$this.closest('label').find('span');
+      $this.fValue = $this[0].value;
+      $this.fUnit = $this.attr('unit');
+      refreshValueStr($this);
+      $filter_map[$this.fName] = $this;
+    }
+    function oninput(e){
+      var name,$filter;
+      name = $(e.target).attr('filter');
+      $filter = $filter_map[name];
+      $filter.fValue = $filter[0].value;
+      refreshValueStr($filter);
+      setFilterProperty();
+    }
+    function refreshValueStr($filter){
+      if($filter.fName!="drop-shadow"){
+        $filter.fValueStr = $filter.fName +'('
+          +$filter.fValue + $filter.fUnit +')';
+      }else{
+        $filter.fValueStr = $filter.fName + '('
+          + $filter.fValue + $filter.fUnit +' '
+          + $filter.fValue + $filter.fUnit
+          + ' 6px black)';
+      }
+      $filter.fTextEle.text($filter.fValueStr);
+    }
+    function setFilterProperty(){
+      var i,value="";
+      for(i in $filter_map){
+        value +=  $filter_map[i].fValueStr +' ';
+      }
+      $target[0].style.filter = value;
+    }
+
+
+
+    let $bgBlend = $('.background-blend');
+   let  $firstImg = $('.mix-first');
+    let $lastImg = $('.mix-last');
+ let $mixBtn = $('.mix-btn');
+ let $mixText = $('.mix-text');
+ $mixBtn.click(function(e){
+  console.log(e.target.innerText)
+  $mixText.html(e.target.innerText)
+  $firstImg.css('mix-blend-mode',e.target.innerText);
+        $lastImg.css('mix-blend-mode',e.target.innerText);
+        $bgBlend.css('background-blend-mode',e.target.innerText);
+});
+
+
+});
+</script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      font-size: 100px;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      /* color: #dadada; */
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+    .pic {
+      width: 60%;
+      max-width: 500px;
+      margin: auto;
+    }
+    .pic img {
+      width: 100%;
+      height: auto;
+      border: 1px solid black;
+    }
+    .filters label{
+	display: block;
+	width: 100%;
+	font-size: .2rem;
+	color:#555;
+	margin:3px 0;
+}
+.filters label span{
+	display: inline-block;
+	text-align: left;
+	width: 350px;
+}
+
+input[type="range"]{
+	appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  -ms-appearance:none;
+	width: 400px;
+	height: 3px;
+	background-color: #333;
+	box-shadow: 0 -1px 1px rgba(255,255,255,0.5) inset;
+	border-radius: 5px;
+	outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3),
+    0 3px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    -webkit-appearance: none;
+    border: 0;
+  }
+input[type="range"]::-webkit-slider-thumb:hover{
+	cursor:pointer;
+}
+.mix-container{
+  display: inline-block;
+	height: auto;
+	margin: 10vw auto 1vw auto;
+}
+.background-blend{
+	width: 300px;
+	height: 300px;
+	display: inline-block;
+	background-image: url(bg.png),url(luck.jpg);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 100%,100%;
+	background-blend-mode: normal;
+}
+.background-blend.exchange{
+	background-image: url(luck.jpg),url(bg.png);
+}
+.mix-blend{
+	display: inline-block;
+	width: 300px;
+	height: 300px;
+	position: relative;
+  overflow: hidden;
+}
+.mix-blend>img{
+	display: inline-block;
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	width: 100%;
+	height: auto;
+	z-index: 2;
+}
+.mix-blend>img:last-child{
+	z-index: 1;
+}
+.mix-blend.exchange>img:last-child{
+	z-index: 3;
+}
+.mix-text{
+  font-size: 4vw;
+  color: #000;
+}
+.button-container{
+  width: 80vw;
+  margin-left: 10vw;
+  color: #000;
+  font-size: 1vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.mix-btn{
+  flex-shrink: 0;
+  width: 10vw;
+  height:2vw;
+  line-height: 2vw;
+  background-color: aqua;
+  border-radius: 2vw;
+  margin: 2vw;
+}
+.draw-img{
+  width: 60vw;
+  margin: 20vw 0;
+  filter: blur(0px) grayscale(1) sepia(0.2) brightness(1.2) contrast(2) hue-rotate(0deg) invert(0) saturate(0.7) opacity(1) drop-shadow(black 0px 0px 6px);
+}
+  </style>
+</html>
