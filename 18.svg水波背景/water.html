@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>svg水波背景</title>
+  </head>
+  <body>
+    <div>
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <filter
+            id="f"
+            filterUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width="1000"
+            height="1000"
+          >
+            <feImage
+              xlink:href="#ripples"
+              x="0"
+              y="0"
+              width="1000"
+              height="1000"
+              preserveAspectRatio="xMidYMid meet"
+              result="wave"
+            />
+            <feGaussianBlur in="wave" stdDeviation="5" result="gaussWave" />
+            <feDiffuseLighting
+              in="gaussWave"
+              lighting-color="#ffffff"
+              surfaceScale="80"
+              diffuseConstant="0.5"
+              result="lightWave"
+            >
+              <feDistantLight azimuth="-90" elevation="60" />
+            </feDiffuseLighting>
+            <feImage
+              xlink:href="./water2.jpg"
+              x="0"
+              y="0"
+              width="1000"
+              height="1000"
+              preserveAspectRatio="xMidYMid slice"
+              result="bg"
+            />
+            <feBlend in="lightWave" in2="bg" mode="multiply" />
+          </filter>
+          <g id="ripples">
+            <g class="ripple" transform="translate(-3000,-3000)">
+              <circle
+                id="circle1"
+                cx="0"
+                cy="0"
+                r="4"
+                stroke-width="2"
+                fill="none"
+                stroke="hsla(0,0%,0%,0.6)"
+              >
+                <animate
+                  attributeName="stroke"
+                  begin="indefinite"
+                  fill="freeze"
+                  from="hsla(0,0%,0%,0.6)"
+                  to="hsla(0,0%,0%,0)"
+                  repeatCount="1"
+                  dur="5s"
+                />
+                <animate
+                  begin="indefinite"
+                  attributeName="r"
+                  fill="freeze"
+                  from="4"
+                  to="60"
+                  repeatCount="1"
+                  dur="5s"
+                />
+              </circle>
+              <circle
+                id="circle2"
+                cx="0"
+                cy="0"
+                r="14"
+                stroke-width="2"
+                fill="none"
+                stroke="hsla(0,0%,0%,0.6)"
+              >
+                <animate
+                  attributeName="stroke"
+                  begin="indefinite"
+                  fill="freeze"
+                  from="hsla(0,0%,0%,0.6)"
+                  to="hsla(0,0%,0%,0)"
+                  repeatCount="1"
+                  dur="5s"
+                />
+                <animate
+                  begin="indefinite"
+                  attributeName="r"
+                  fill="freeze"
+                  from="14"
+                  to="100"
+                  repeatCount="1"
+                  dur="5s"
+                />
+              </circle>
+              <circle
+                id="circle3"
+                cx="0"
+                cy="0"
+                r="24"
+                stroke-width="2"
+                fill="none"
+                stroke="hsla(0,0%,0%,0.4)"
+              >
+                <animate
+                  attributeName="stroke"
+                  begin="indefinite"
+                  fill="freeze"
+                  from="hsla(0,0%,0%,0.4)"
+                  to="hsla(0,0%,0%,0)"
+                  repeatCount="1"
+                  dur="5s"
+                />
+                <animate
+                  begin="indefinite"
+                  attributeName="r"
+                  fill="freeze"
+                  from="24"
+                  to="150"
+                  repeatCount="1"
+                  dur="5s"
+                />
+              </circle>
+              <circle
+                id="circle4"
+                cx="0"
+                cy="0"
+                r="34"
+                stroke-width="2"
+                fill="none"
+                stroke="hsla(0,0%,0%,0.2)"
+              >
+                <animate
+                  attributeName="stroke"
+                  begin="indefinite"
+                  fill="freeze"
+                  from="hsla(0,0%,0%,0.2)"
+                  to="hsla(0,0%,0%,0)"
+                  repeatCount="1"
+                  dur="5s"
+                />
+                <animate
+                  begin="indefinite"
+                  attributeName="r"
+                  fill="freeze"
+                  from="34"
+                  to="200"
+                  repeatCount="1"
+                  dur="5s"
+                />
+              </circle>
+            </g>
+          </g>
+        </defs>
+        <g>
+          <rect
+            x="0"
+            y="0"
+            width="1000"
+            height="1000"
+            fill="none"
+            filter="url(#f)"
+          />
+        </g>
+      </svg>
+    </div>
+  </body>
+  <script src="jquery-1.12.4.js"></script>
+  <script type="text/javascript">
+    jQuery(function ($) {
+      var $svg = $("svg"),
+        $ripple = $(".ripple"),
+        $ripples = $("#ripples");
+
+      $svg.on("click", function (e) {
+        console.log(`32413241234`);
+        var i,
+          $ani,
+          $newRipple,
+          matrix = $svg[0].getScreenCTM().inverse(),
+          svgPoint = $svg[0].createSVGPoint(),
+          svgXY;
+        svgPoint.x = e.clientX;
+        svgPoint.y = e.clientY;
+        svgXY = svgPoint.matrixTransform(matrix);
+
+        $newRipple = $ripple.clone();
+        $ripples.append($newRipple);
+        $newRipple.attr(
+          "transform",
+          "translate(" + svgXY.x + "," + svgXY.y + ")"
+        );
+
+        $ani = $newRipple.find("animate");
+
+        $newRipple.myEndAniNum = 0;
+        $newRipple.myOnEnd = function () {
+          if (++$newRipple.myEndAniNum == $ani.length) {
+            $newRipple.remove();
+          }
+        };
+
+        $ani.each(function (i) {
+          $ani[i].beginElement();
+          $ani[i].onend = $newRipple.myOnEnd;
+        });
+      });
+    });
+  </script>
+  <style>
+    html,
+    body,
+    h1,
+    p,
+    div,
+    a,
+    ul,
+    ol,
+    input {
+      margin: 0px;
+      padding: 0px;
+    }
+    ul,
+    ol {
+      list-style-type: none;
+    }
+
+    html {
+      font-size: 100px;
+      font-family: "Microsoft YaHei", sans-serif;
+      color: white;
+      /* color: #dadada; */
+      text-align: center;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</html>
