@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>翻折的字母</title>
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <div class="avatar-wrapepr">
+        <image class="avatar-img" src="avatar.jpg"></image>
+      </div>
+      <div class="text-wrapper">Super_Mario_Bros</div>
+    </div>
+  </body>
+  <script>
+    let $box = document.querySelector(".text-wrapper");
+    new Promise((resolve) => {
+      textTransform3D($box);
+      resolve(true);
+    }).then(() => {
+      let len = $items.length;
+      setInterval(autoAni(), 1500 + len * 200);
+    });
+
+    function textTransform3D($td) {
+      let i;
+      let $item;
+      let letter = $td.innerHTML.trim().split("");
+      $td.innerHTML = "";
+      for (i = 0; i < letter.length; i++) {
+        $item = document.createElement("span");
+        $item.className = "item";
+        $item.innerHTML = letter[i];
+        $item.setAttribute("letter", letter[i]);
+        $td.append($item);
+      }
+      $items = document.querySelectorAll(".item");
+    }
+    function autoAni() {
+      $items.forEach((item, i) => {
+        setTimeout(() => {
+          item.classList.add("auto-ani");
+        }, 500 + i * 200);
+        setTimeout(() => {
+          item.classList.remove("auto-ani");
+        }, 750 + i * 200);
+      });
+      return autoAni;
+    }
+  </script>
+  <style>
+    .page {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .text-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+    }
+    .item {
+      font-weight: 1000;
+      color: rgb(0, 99, 21);
+      position: relative;
+      font-size: 3em;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      filter: saturate(120%);
+    }
+    .item:before,
+    .item:after {
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: attr(letter);
+      transform-origin: left center;
+      transform: rotateY(-20deg);
+      transition: all 0.5s ease-in;
+      border: none;
+      background: none;
+    }
+    .item:before {
+      z-index: 2;
+      color: rgb(145, 255, 0);
+      text-shadow: 1px 1px #888, -1px -1px #eee;
+    }
+    .item:after {
+      z-index: 1;
+      color: rgb(0, 0, 0, 0.2);
+      filter: blur(1px);
+      transform: scale(1.05, 1) skewY(2deg);
+    }
+    .item:hover:before,
+    .auto-ani::before {
+      transition: all 0.2s ease-out;
+      transform: rotateY(-70deg);
+    }
+    .item:hover:after,
+    .auto-ani::after {
+      transform: rotateY(-40deg) skewY(20deg) scale(1.1, 1);
+      transition: all 0.2s ease-out;
+    }
+    .avatar-wrapepr {
+      position: relative;
+      width: 30vw;
+      height: 30vw;
+      border-radius: 100%;
+      overflow: hidden;
+    }
+    .avatar-img {
+      position: relative;
+      width: 30vw;
+      height: 30vw;
+    }
+  </style>
+</html>
