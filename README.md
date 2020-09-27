@@ -4,6 +4,8 @@
 
 [02.旋转的骰子](https://theluckdark.github.io/magicWeb/02.%e6%97%8b%e8%bd%ac%e7%9a%84%e9%aa%b0%e5%ad%90/dice.html)
 
+[05.翻折的字母](https://theluckdark.github.io/magicWeb/05.%e7%bf%bb%e6%8a%98%e7%9a%84%e5%ad%97%e6%af%8d/index.html)
+
 [06.霓虹灯1](https://theluckdark.github.io/magicWeb/06.%e9%9c%93%e8%99%b9%e7%81%af/light.html)
 
 [08.SVG镂空文本](https://theluckdark.github.io/magicWeb/08.SVG%e9%95%82%e7%a9%ba%e6%96%87%e6%9c%ac/08.html)
@@ -13,6 +15,8 @@
 [16.让图中的水面动起来](https://theluckdark.github.io/magicWeb/16.%e8%ae%a9%e5%9b%be%e4%b8%ad%e7%9a%84%e6%b0%b4%e9%9d%a2%e5%8a%a8%e8%b5%b7%e6%9d%a5/watermove.html)
 
 [18.svg水波背景](https://theluckdark.github.io/magicWeb/18.svg%e6%b0%b4%e6%b3%a2%e8%83%8c%e6%99%af/water.html)
+
+[25.看鼠标的眼睛](https://theluckdark.github.io/magicWeb/25.%e7%9c%8b%e9%bc%a0%e6%a0%87%e7%9a%84%e7%9c%bc%e7%9d%9b/index.html)
 
 [28.长阴影](https://theluckdark.github.io/magicWeb/28.%e9%95%bf%e9%98%b4%e5%bd%b1/langShadow.html)
 
