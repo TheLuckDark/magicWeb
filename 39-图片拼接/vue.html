@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>图片拼接</title>
+	<link type="text/css" rel="stylesheet" href="./styles.css" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="app" class="page">
+		<div class="page-bg" :class="bgColor"></div>
+		<div class="bg" @click="onclick" @mousemove="onmousemove">
+			<div class="box">
+			</div>
+		</div>
+	</div>
+</body>
+<script src=".//jquery-1.12.4.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: {
+			bgColor:'black',
+			$box: null,
+			$allPieces: null,
+			bgs: null,
+		},
+		mounted() {
+			this.init();
+		},
+		computed: {
+		},
+		methods: {
+			init() {
+				this.$box = $('.box');
+				this.$allPieces;
+				this.bgs = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg'];
+				this.$box.aniCount = 0;
+				this.$box.index = 0;
+				this.$box.aniState = 0;
+				this.$box.cX = this.$box.width() / 2;
+				this.$box.cY = this.$box.height() / 2;
+				this.$box.r = (this.$box.width() + this.$box.height()) / 4 + 50;
+				this.$box.total = 160;
+				this.createPieces();
+				this.setAllPiecesStyle();
+				this.changeAllBG();
+			},
+			onclick() {
+				if (!this.$box.aniState) {
+					this.$box.aniState++;
+					this.$box.addClass('out');
+				}
+			},
+			onTransitionEnd() {
+				if (++this.$box.aniCount == this.$allPieces.length) {
+					if (this.$box.aniState == 1) {
+						this.$box.aniState++;
+						this.changeAllBG();
+						this.setAllPiecesStyle();
+						this.$box.removeClass('out');
+						this.$box.addClass('in');
+					} else if (this.$box.aniState == 2) {
+						this.$box.aniState = 0;
+						this.$box.removeClass('in');
+					}
+					this.$box.aniCount = 0;
+				}
+			},
+			createPieces() {
+				var $piece, i;
+				for (i = 0; i < this.$box.total; ++i) {
+					$piece = $('<div class="piece"></div>');
+					this.$box.append($piece);
+					$piece.on('animationend', this.onTransitionEnd);
+				}
+				this.$allPieces = $('.piece');
+			},
+			setAllPiecesStyle() {
+				var r = this.$box.r, levels = 5, nums, minR, maxR, w;
+				nums = Math.floor(this.$allPieces.length / levels);
+				for (var i = 0; i < levels; ++i) {
+					for (var j = 0; j < nums; ++j) {
+						var $this = $(this.$allPieces.get(i * nums + j));
+						maxR = r / levels * (i + 1);
+						minR = r / levels * i;
+						w = r / (i + 1);
+						this.setPieceStyle($this, minR, maxR, w, i);
+					}
+				}
+			},
+			setPieceStyle($this, minR, maxR, maxW, z) {
+				var deg, r, w, h, top, left, z;
+				w = this.randomInt(maxW * 0.8, maxW);
+				h = this.randomInt(maxW * 0.8, maxW);
+				deg = this.randomInt(0, 360);
+				r = this.randomInt(minR, maxR);
+				top = this.$box.cY + Math.sin(deg) * r - h / 2;
+				left = this.$box.cX + Math.cos(deg) * r - w / 2;
+				$this.css({
+					width: w + "",
+					height: h + "",
+					top: top + "px",
+					left: left + "px",
+					backgroundPosition: (-left) + "px " + (-top) + "px",
+					animationDelay: Math.random() * 1 + "s"
+				});
+				$this[0].top = top;
+				$this[0].left = left;
+				$this[0].z = z;
+			},
+
+			randomInt(begin, end) {
+				return Math.round(Math.random() * (end - begin) + begin);
+			},
+
+			changeAllBG() {
+				let self = this;
+				console.log(self.$box.index)
+				if(this.$box.index == 0){
+					this.bgColor='red'
+				}
+				if(this.$box.index == 1){
+					this.bgColor='blue'
+				}
+				if(this.$box.index == 2){
+					this.bgColor='black'
+				}
+				this.$allPieces.each(function () {
+					var $this = $(this);
+					$this.css({
+						backgroundImage: "url(" + self.bgs[self.$box.index] + ")"
+					});
+				});
+				if (++this.$box.index == self.bgs.length) {
+					this.$box.index = 0;
+				}
+			},
+
+			onmousemove(e) {
+				this.$box.mx = $(window).width() / 2 - e.clientX;
+				this.$box.my = $(window).height() / 2 - e.clientY;
+				let self = this;
+				this.$allPieces.each(function () {
+					var $this = $(this);
+					var left = $this[0].left + self.$box.mx * 0.02 * $this[0].z;
+					var top = $this[0].top + self.$box.my * 0.02 * $this[0].z;
+					$this.css({
+						top: top,
+						left: left,
+					});
+				});
+			},
+		},
+	});
+</script>
+
+</html>
