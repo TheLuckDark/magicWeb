@@ -29,3 +29,9 @@
 [42.canvas绘画基础](https://theluckdark.github.io/magicWeb/42.canvas%e7%bb%98%e7%94%bb%e5%9f%ba%e7%a1%80/canvas.html)
 
 [45.canvas像素操作和电视噪声](https://theluckdark.github.io/magicWeb/45.canvas%e5%83%8f%e7%b4%a0%e6%93%8d%e4%bd%9c%e5%92%8c%e7%94%b5%e8%a7%86%e5%99%aa%e5%a3%b0/snow.html)
+
+[05.翻折的字母](https://theluckdark.github.io/magicWeb/05.%e7%bf%bb%e6%8a%98%e7%9a%84%e5%ad%97%e6%af%8d/index.html)
+[25.看鼠标的眼睛](https://theluckdark.github.io/magicWeb/25.%e7%9c%8b%e9%bc%a0%e6%a0%87%e7%9a%84%e7%9c%bc%e7%9d%9b/index.html)
+[39-图片拼接](https://theluckdark.github.io/magicWeb/39-%e5%9b%be%e7%89%87%e6%8b%bc%e6%8e%a5/vue.html)
+[47-文本像素动画-2](https://theluckdark.github.io/magicWeb/47-%e6%96%87%e6%9c%ac%e5%83%8f%e7%b4%a0%e5%8a%a8%e7%94%bb-2/index.html)
+
