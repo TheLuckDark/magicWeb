@@ -1,0 +1,136 @@
+html,
+body,
+h1,
+p,
+div,
+a,
+ul,
+ol,
+input {
+  margin: 0px;
+  padding: 0px;
+}
+ul,
+ol {
+  list-style-type: none;
+}
+
+html {
+  font-size: 100px;
+  background-color: black;
+  background: url(bg.jpg) center/100% 100% no-repeat;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Microsoft YaHei", sans-serif;
+  color: white;
+  text-align: center;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.page {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bg,
+.trails {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.bg {
+  background-image: url(bg.jpg), url(bg.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
+}
+.text {
+  font-size: 10vw;
+  color: black;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.trails {
+  background: rgba(252, 252, 252, 0.95);
+  filter: blur(10px);
+  mix-blend-mode: lighten;
+}
+.circle.template {
+  visibility: hidden;
+}
+.circle {
+  position: absolute;
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+  background: black;
+  transform: translate(-50%, -50%);
+  animation: blur 2s 6s both;
+}
+@keyframes blur {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.snow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.snowflake {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 10vw;
+  height: 10vw;
+  background-color: white;
+  border-radius: 50%;
+  animation: down 3s infinite;
+}
+.snowflake:first-child {
+  display: none;
+}
+.snowflake.level1 {
+  width: 0.2vw;
+  height: 0.2vw;
+}
+.snowflake.level2 {
+  width: 0.5vw;
+  height: 0.5vw;
+  box-shadow: 0 0 2px white;
+}
+.snowflake.level3 {
+  width: 0.8vw;
+  height: 0.8vw;
+  box-shadow: 0 0 4px 2px white;
+}
+.snowflake.level4 {
+  width: 1.1vw;
+  height: 1.1vw;
+  box-shadow: 0 0 6px 2px white;
+}
+.snowflake.level5 {
+  width: 1.5vw;
+  height: 1.5vw;
+  box-shadow: 0 0 15px 6px white;
+}
+
+@keyframes down {
+  to {
+    top: 100%;
+  }
+}

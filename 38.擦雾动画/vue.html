@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>擦雾动画</title>
+	<link type="text/css" rel="stylesheet" href="./styles.css" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="app" class="page">
+		<div class="bg">
+			<div class="snow">
+				<div class="snowflake"></div>
+			</div>
+		</div>
+		<div class="trails">
+			<span class="text">擦开雪面就能看到卖火柴的小女孩了</span>
+			<div class="circle template"></div>
+		</div>
+	</div>
+</body>
+<script src="./jquery-1.12.4.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: {
+			x: 0,
+			y: 0,
+			drag: false,
+			$circles: null,
+			$temp: null
+		},
+		mounted() {
+			this.$circles = $('.trails');
+			this.$temp = $('.circle.template');
+			$(document).on('mousedown', this.mousedown);
+			$(document).on('mouseup', this.mouseup);
+			$(document).on('mousemove', this.mousemove);
+			this.createSnow();
+		},
+		computed: {
+		},
+		methods: {
+			mousedown(e) {
+				this.drag = true;
+			},
+			mousemove(e) {
+				if (this.drag) {
+					this.x = e.clientX;
+					this.y = e.clientY;
+					let $new = this.$temp.clone();
+					this.$circles.append($new);
+					$new.removeClass('template');
+					$new.css({
+						left: this.x + "px",
+						top: this.y + "px"
+					});
+					$new.on('animationend', function () {
+						$(this).remove();
+					});
+				}
+			},
+			mouseup() {
+				this.drag = false;
+			},
+			createSnow() {
+				var i, snow, snowflake, temp, level;
+				snow = $('.snow');
+				temp = snow.children(':first');
+				for (i = 0; i < 300; ++i) {
+					snowflake = temp.clone();
+					snow.append(snowflake);
+					level = 1 + Math.round(Math.random() * 4);
+					snowflake.addClass('level' + level);
+					snowflake.css({
+						top: -(50 + Math.random() * 150) + "%",
+						left: Math.random() * 100 + "%",
+						animationDuration: (50 / (level * 4) + Math.random() * 3) + "s",
+					});
+				}
+			}
+
+		},
+	});
+</script>
+
+</html>
