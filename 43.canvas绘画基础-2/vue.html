@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>canvas绘画基础-2</title>
+	<link type="text/css" rel="stylesheet" href="./styles.css" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="app" class="page">
+		<canvas id="canvas" ref="canvas" width="1000" height="600"></canvas>
+	</div>
+</body>
+<script src="canvasCommon.js"></script>
+<script src=".//jquery-1.12.4.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: {
+			maxNum: 100,
+			minDis: 200,
+			R: 5,
+			canvas: null,
+			canvasBg: null,
+			w: 0,
+			h: 0,
+			maxV: 1,
+			minV: 0,
+			config: [],
+			balls: [],
+			hasMouse: false,
+			mouse_ball: {
+				x: -100,
+				y: -100,
+				vx: 0,
+				vy: 0,
+				r: 8,
+				color: "green"
+			},
+		},
+		mounted() {
+			this.init();
+			window.onresize = this.init;
+		},
+		computed: {
+		},
+		methods: {
+			init() {
+				this.canvas = this.$refs.canvas;
+				this.canvasBg = this.canvas.getContext("2d");
+				this.canvas.width = this.w = window.innerWidth;
+				this.canvas.height = this.h = window.innerHeight;
+				this.canvas.onmouseenter = this.onmouseenter;
+				this.canvas.onmouseleave = this.onmouseleave;
+				this.canvas.onmousemove = this.onmousemove;
+				this.config = [{
+					x: [0, this.w],
+					y: [-this.R, -this.R],
+					vx: [this.maxV, this.maxV],
+					vy: [this.minV, this.maxV]
+				}, {
+					x: [0, this.w],
+					y: [this.h + this.R, this.h + this.R],
+					vx: [-this.maxV, this.maxV],
+					vy: [-this.maxV, -this.minV]
+				}, {
+					x: [-this.R, -this.R],
+					y: [0, this.h],
+					vx: [this.minV, this.maxV],
+					vy: [-this.maxV, this.maxV]
+				}, {
+					x: [this.w + this.R, this.w + this.R],
+					y: [0, this.h],
+					vx: [-this.maxV, -this.minV],
+					vy: [-this.maxV, this.maxV]
+				}];
+				this.createBalls();
+				window.requestAniFrame(this.update);
+			},
+			createBall() {
+				let info = this.config[this.randomInt(0, this.config.length - 1)];
+				let ball = {
+					x: this.randomFloat(info.x[0], info.x[1]),
+					y: this.randomFloat(info.y[0], info.y[1]),
+					vx: this.randomFloat(info.vx[0], info.vx[1]),
+					vy: this.randomFloat(info.vy[0], info.vy[1]),
+					r: this.R,
+					color: "white"
+				}
+				return ball;
+			},
+			createBalls() {
+				for (let i = 0; i < this.maxNum; i++) {
+					this.balls.push(this.createBall());
+				}
+			},
+			renderPosition() {
+				let activeBalls = [];
+				let ball;
+				this.balls.forEach(element => {
+					ball = element;
+					ball.x += ball.vx;
+					ball.y += ball.vy;
+					if (ball.x > -this.minDis && ball.x < this.w + this.minDis && ball.y > -this.minDis && ball.y < this.h + this.minDis) {
+						activeBalls.push(ball)
+					}
+				});
+				this.balls = activeBalls;
+				if (this.balls.length < this.maxNum) {
+					this.balls.push(this.createBall())
+				}
+			},
+			renderLines() {
+				let f, alpha, i, j;
+				for (i = 0; i < this.balls.length; i++) {
+					for (j = i + 1; j < this.balls.length; j++) {
+						f = this.getDisOf(this.balls[i], this.balls[j]) / this.minDis;
+						if (f < 1) {
+							alpha = 1 - f;
+							this.renderLine(this.balls[i].x, this.balls[i].y, this.balls[j].x, this.balls[j].y, alpha);
+						}
+					}
+				}
+			},
+			renderLine(x1, y1, x2, y2, a) {
+				this.canvasBg.strokeStyle = "rgba(150,150,150," + a + ")";
+				this.canvasBg.lineWidth = 2;
+				this.canvasBg.beginPath();
+				this.canvasBg.moveTo(x1, y1);
+				this.canvasBg.lineTo(x2, y2);
+				this.canvasBg.stroke();
+				this.canvasBg.closePath();
+			},
+			getDisOf(ball1, ball2) {
+				let dx = Math.abs(ball1.x - ball2.x),
+					dy = Math.abs(ball1.y - ball2.y);
+				return Math.sqrt(dx * dx + dy * dy);
+			},
+			renderBalls() {
+				for (i = 0; i < this.balls.length; ++i) {
+					this.canvasBg.fillStyle = this.balls[i].color;
+					this.canvasBg.beginPath();
+					this.canvasBg.arc(this.balls[i].x, this.balls[i].y, this.balls[i].r, 0, Math.PI * 2, true);
+					this.canvasBg.closePath();
+					this.canvasBg.fill();
+				}
+			},
+			update(t) {
+				this.canvasBg.clearRect(0, 0, this.w, this.h);
+				this.renderPosition();
+				this.renderBalls();
+				this.renderLines();
+				window.requestAniFrame(this.update);
+			},
+			randomFloat(min, max) {
+				return min + Math.random() * (max - min);
+			},
+			randomInt(min, max) {
+				return Math.round(this.randomFloat(min, max));
+			},
+			onmouseenter() {
+				this.hasMouse = true;
+				this.balls.unshift(this.mouse_ball);
+			},
+			onmouseleave() {
+				this.hasMouse = false;
+				this.balls.shift();
+			},
+			onmousemove(e) {
+				if (this.hasMouse) {
+					this.mouse_ball.x = e.clientX;
+					this.mouse_ball.y = e.clientY;
+				}
+			}
+		},
+	});
+</script>
+
+</html>
