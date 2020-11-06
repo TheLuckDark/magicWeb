@@ -38,3 +38,9 @@
 
 [47-文本像素动画-2](https://theluckdark.github.io/magicWeb/47-%e6%96%87%e6%9c%ac%e5%83%8f%e7%b4%a0%e5%8a%a8%e7%94%bb-2/index.html)
 
+[38.擦雾动画](https://theluckdark.github.io/magicWeb/38.%e6%93%a6%e9%9b%be%e5%8a%a8%e7%94%bb/vue.html)
+
+[43.canvas绘画基础-2](https://theluckdark.github.io/magicWeb/43.canvas%e7%bb%98%e7%94%bb%e5%9f%ba%e7%a1%80-2/vue.html)
+
+[48.加载动画](https://theluckdark.github.io/magicWeb/48.%e5%8a%a0%e8%bd%bd%e5%8a%a8%e7%94%bb/index.html)
+
