@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>电子钟</title>
+	<!-- <link type="text/css" rel="stylesheet" href="./styles.css" /> -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="app" class="page">
+		<div class="frame-wrapper"
+			:class="[clockingType == 1?'frame-clock1':'',clockingType == 2?'frame-clock2':'',clockingType == 3?'frame-clock3':'',clockingType == 4?'frame-clock4':'',clockingType == 5?'frame-clock5':'']">
+			<div class="frame" :class="isClocking?'frame-clock':''">
+				<div class="screen">
+					<div class="shadows">
+						<div class="number"
+							:class="[index == 1 || index == 3?'num-margin':'',(index == 0 || index == 1)&&changeType == 1?'number-breath':'',(index == 2 || index == 3)&&changeType == 2?'number-breath':'',(index == 4 || index == 5)&&changeType == 3?'number-breath':'']"
+							v-for="(item, index) in nums" :key="index">
+							<div class="branch up center"
+								:class="item == 0||item == 2||item == 3||item == 5||item == 6||item == 7||item == 8||item == 9?'light':''">
+							</div>
+							<div class="branch up left"
+								:class="item == 0||item == 4||item == 5||item == 6||item == 8||item == 9?'light':''">
+							</div>
+							<div class="branch up right"
+								:class="item == 0||item == 1||item == 2||item == 3||item == 4||item == 7||item == 8||item == 9?'light':''">
+							</div>
+							<div class="branch middle center"
+								:class="item == 2||item == 3||item == 4||item == 5||item == 6||item == 8||item == 9?'light':''">
+							</div>
+							<div class="branch down left"
+								:class="item == 0||item == 2||item == 6||item == 8?'light':''">
+							</div>
+							<div class="branch down right"
+								:class="item == 0||item == 1||item == 3||item == 4||item == 5||item == 6||item == 7||item == 8||item == 9?'light':''">
+							</div>
+							<div class="branch down center"
+								:class="item == 0||item == 2||item == 3||item == 5||item == 6||item == 8||item == 9?'light':''">
+							</div>
+						</div>
+						<div class="number-point-wrapper1" :class="isChangeingClock?'':'number-point-breath'">
+							<div class="number-point"></div>
+							<div class="number-point"></div>
+						</div>
+						<div class="number-point-wrapper2" :class="isChangeingClock?'':'number-point-breath'">
+							<div class="number-point"></div>
+							<div class="number-point"></div>
+						</div>
+					</div>
+					<div class="clock-container"
+						:class="[isClocking?'clock-breath':'',isChangeingClock?'clock-light':'']">
+						<div class="clock-body">
+							<div class="clock-body-line1"></div>
+							<div class="clock-body-line2"></div>
+						</div>
+						<div class="clock-line1"></div>
+						<div class="clock-line2"></div>
+						<div class="clock-ear1"></div>
+						<div class="clock-ear2"></div>
+					</div>
+					<div class="date-wrapper" :class="isdateing?'date-light':''">日</div>
+					<div class="week-contaienr">
+						<div class="week-seven" :class="weekDay == '日'?'week-light':''">日</div>
+						<div class="week-one" :class="weekDay == '一'?'week-light':''">一</div>
+						<div class="week-two" :class="weekDay == '二'?'week-light':''">二</div>
+						<div class="week-three" :class="weekDay == '三'?'week-light':''">三</div>
+						<div class="week-four" :class="weekDay == '四'?'week-light':''">四</div>
+						<div class="week-five" :class="weekDay == '五'?'week-light':''">五</div>
+						<div class="week-six" :class="weekDay == '六'?'week-light':''">六</div>
+					</div>
+					<div class="screen-light" v-if="isClocking"></div>
+				</div>
+				<div class="btn-contaienr">
+					<div class="btn-alone" @click='changeModel'>⏰</div>
+					<div class="btn-alone" @click="addBtn">🔺</div>
+					<div class="btn-alone" @click="lessBtn">🔻</div>
+				</div>
+			</div>
+		</div>
+		<div class="clock-text">{{clockText}}</div>
+	</div>
+</body>
+<script src="./jquery-1.12.4.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: {
+			clockingType: 0,
+			clockText: '大仙牌闹钟',
+			clockNums: [0, 0, 0, 0, 0, 0],
+			changeType: 0,
+			dateing: null,
+			timeing: null,
+			weekDay: '',
+			clocking: null,
+			isClocking: false,
+			isChangeingClock: false,
+			nums: [0, 0, 0, 0, 0, 0],
+		},
+		mounted() {
+			let self = this;
+			this.timeing = window.setInterval(function () {
+				if (this.isdateing == true) {
+					return;
+				}
+				self.refreshTime();
+			}, 1000);
+			let now = new Date();
+			let year1 = now.getYear(); //获取当前年份(2位)
+			let year = `${year1}`;
+			year = year.substring(year.length - 2, year.length);
+			let month = now.getMonth() + 1;
+			if (month < 10) {
+				month = `0${month}`
+			}
+			let today = now.getDate()
+			let calendar = `${year}${month}${today}`
+			this.calendar = calendar.split("");
+			let day = now.getDay();
+			let weeks = new Array("日", "一", "二", "三", "四", "五", "六");
+			let week = weeks[day];
+			this.weekDay = week;
+		},
+		computed: {
+		},
+		methods: {
+			addBtn() {
+				if (this.isClocking == true) {
+					this.closeClock();
+					return;
+				}
+				if (this.isChangeingClock == false) {
+					this.isdateing = true;
+					this.nums = this.calendar;
+					let self = this;
+					window.clearTimeout(this.dateing);
+					this.dateing = window.setTimeout(function () {
+						self.isdateing = false;
+					}, 3000);
+					return;
+				}
+				if (this.changeType == 1) {
+					if (this.nums[0] == 2 && this.nums[1] == 3) {
+						return;
+					}
+					this.nums[1] = this.nums[1] + 1;
+					if (this.nums[1] == 10) {
+						this.nums[0] = this.nums[0] + 1;
+						this.nums[1] = 0;
+					}
+				}
+				if (this.changeType == 2) {
+					if (this.nums[2] == 5 && this.nums[3] == 9) {
+						return;
+					}
+					this.nums[3] = this.nums[3] + 1;
+					if (this.nums[3] == 10) {
+						this.nums[2] = this.nums[2] + 1;
+						this.nums[3] = 0;
+					}
+				}
+				if (this.changeType == 3) {
+					if (this.nums[4] == 5 && this.nums[5] == 9) {
+						return;
+					}
+					this.nums[5] = this.nums[5] + 1;
+					if (this.nums[5] == 10) {
+						this.nums[4] = this.nums[4] + 1;
+						this.nums[5] = 0;
+					}
+				}
+				this.$forceUpdate();
+			},
+			lessBtn() {
+				if (this.isClocking == true) {
+					this.closeClock();
+					return;
+				}
+				if (this.isChangeingClock == false) {
+					this.isdateing = true;
+					this.nums = this.calendar;
+					let self = this;
+					window.clearTimeout(this.dateing);
+					this.dateing = window.setTimeout(function () {
+						self.isdateing = false;
+					}, 3000);
+					return;
+				}
+				if (this.changeType == 1) {
+					if (this.nums[0] == 0 && this.nums[1] == 0) {
+						return;
+					}
+					if (this.nums[1] == 0) {
+						this.nums[0] = this.nums[0] - 1;
+						this.nums[1] = 10;
+					}
+					this.nums[1] = this.nums[1] - 1;
+				}
+				if (this.changeType == 2) {
+					if (this.nums[2] == 0 && this.nums[3] == 0) {
+						return;
+					}
+					if (this.nums[3] == 0) {
+						this.nums[2] = this.nums[2] - 1;
+						this.nums[3] = 10;
+					}
+					this.nums[3] = this.nums[3] - 1;
+				}
+				if (this.changeType == 3) {
+					if (this.nums[4] == 0 && this.nums[5] == 0) {
+						return;
+					}
+					if (this.nums[5] == 0) {
+						this.nums[4] = this.nums[4] - 1;
+						this.nums[5] = 10;
+					}
+					this.nums[5] = this.nums[5] - 1;
+				}
+				this.$forceUpdate();
+			},
+			changeModel() {
+				if (this.isClocking == true) {
+					this.closeClock();
+					return;
+				}
+				if (this.isChangeingClock == false) {
+					this.nums = this.clockNums;
+					this.isChangeingClock = true;
+				}
+				window.clearInterval(this.timeing);
+				this.changeType = this.changeType + 1;
+				if (this.changeType == 4) {
+					this.changeType = 0;
+					this.clockNums = this.nums;
+					this.isChangeingClock = false;
+					let self = this;
+					self.refreshTime();
+					this.timeing = window.setInterval(function () {
+						self.refreshTime();
+					}, 1000);
+				}
+			},
+			closeClock() {
+				console.log(`sdaf`)
+				console.log(this.clockingType)
+				let self = this;
+				switch (this.clockingType) {
+					case 0:
+						this.clockText = "没点着"
+						this.clockingType = 1;
+						this.$forceUpdate();
+						break;
+					case 1:
+						this.clockText = "还没点着"
+						this.clockingType = 2;
+						this.$forceUpdate();
+						break;
+					case 2:
+						this.clockText = "再点一下试试"
+						self.clockingType = 3;
+						self.$forceUpdate();
+						break;
+					case 3:
+						this.clockText = "咋还是不行呢"
+						self.clockingType = 4;
+						self.$forceUpdate();
+						break;
+					case 4:
+						this.clockText = "最后一下了"
+						self.clockingType = 5;
+						self.$forceUpdate();
+						break;
+					default:
+						this.clockText = "点到了"
+						self.clockingType = 0;
+						self.isClocking = false;
+						self.$forceUpdate();
+						window.setTimeout(function () {
+							self.clockText = "大仙牌闹钟"
+						}, 3000);
+						window.clearTimeout(this.clocking);
+				}
+			},
+			getNum(t) {
+				return [Math.floor(t / 10), t % 10];
+			},
+			refreshTime() {
+				if (this.isdateing == true) {
+					return;
+				}
+				let h,
+					m,
+					s,
+					nums = [];
+				let t = new Date();
+				h = t.getHours();
+				m = t.getMinutes();
+				s = t.getSeconds();
+				nums = nums.concat(this.getNum(h), this.getNum(m), this.getNum(s));
+				this.nums = nums
+				if (this.nums.join() == this.clockNums.join()) {
+					this.clockText = "点击任意按钮关闭闹钟"
+					this.isClocking = true;
+					let self = this;
+					this.clocking = window.setTimeout(function () {
+						self.clockText = "大仙牌闹钟"
+						self.isClocking = false;
+						self.clockingType = 0;
+					}, 60000);
+				}
+			},
+		},
+	});
+</script>
+<style>
+	@font-face {
+		font-family: one;
+		src: url(1.ttf);
+	}
+
+	@font-face {
+		font-family: two;
+		src: url(2.ttf);
+	}
+
+	@font-face {
+		font-family: three;
+		src: url(3.ttf);
+	}
+
+
+	body,
+	html,
+	p,
+	h1,
+	div,
+	span,
+	i,
+	b,
+	ul,
+	ol,
+	li {
+		margin: 0;
+		padding: 0;
+	}
+
+	ul,
+	ul,
+	li {
+		list-style: none;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	html {
+		font-size: 100px;
+	}
+
+	body {
+		color: white;
+		background-color: black;
+		font-family: Arial, "Microsoft YaHei", sans-serif;
+	}
+
+	html,
+	body {
+		width: 100%;
+		height: 100%;
+	}
+
+	.page {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-image: url(bg.png);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+
+	.frame {
+		background-color: #efefef;
+		width: 60vw;
+		height: 18vw;
+		position: relative;
+		border-radius: 1vw;
+		flex-shrink: 0;
+	}
+
+	.screen {
+		width: 47vw;
+		height: 15vw;
+		border-radius: 1.2vw;
+		background-color: #ddd;
+		position: absolute;
+		top: 50%;
+		left: 2vw;
+		transform: translateY(-50%);
+		box-shadow: -2px -2px 10px 2px gray inset;
+		overflow: hidden;
+	}
+
+	.branch::before,
+	.branch::after {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		border: 0.3vw solid transparent;
+	}
+
+	.branch::before {
+		right: 100%;
+	}
+
+	.branch::after {
+		left: 100%;
+	}
+
+	.branch {
+		position: absolute;
+		transform: translate(-50%, -50%);
+		width: 2.2vw;
+		height: 0.6vw;
+	}
+
+	.up {
+		top: 0;
+	}
+
+	.middle {
+		top: 50%;
+	}
+
+	.down {
+		top: 100%;
+	}
+
+	.up.left,
+	.up.right {
+		top: 25%;
+	}
+
+	.down.left,
+	.down.right {
+		top: 75%;
+	}
+
+	.center {
+		left: 50%;
+	}
+
+	.left {
+		left: 0%;
+	}
+
+	.right {
+		left: 100%;
+	}
+
+	.left,
+	.right {
+		transform: translate(-50%, -50%) rotate(-90deg);
+	}
+
+	.number {
+		width: 3vw;
+		height: 100%;
+		margin: auto 1vw;
+		flex-shrink: 0;
+		position: relative;
+	}
+
+	.numbers,
+	.shadows {
+		position: absolute;
+		bottom: 3vw;
+		left: 50%;
+		width: 35vw;
+		height: 6vw;
+		transform: translate(-50%, 0);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.shadows .branch {
+		background-color: #d0d0d0;
+	}
+
+	.shadows .branch::before {
+		border-right-color: #d0d0d0;
+	}
+
+	.shadows .branch::after {
+		border-left-color: #d0d0d0;
+	}
+
+	.branch.light {
+		background-color: black;
+		box-shadow: -2px 2px 2px #aaa;
+		transition: background-color 0.3s;
+	}
+
+	.branch.light::before {
+		border-right-color: black;
+		transition: border-color 0.3s;
+	}
+
+	.branch.light::after {
+		border-left-color: black;
+		transition: border-color 0.3s;
+	}
+
+	.num-margin {
+		margin-right: 4vw;
+	}
+
+	.number-point-wrapper1 {
+		position: absolute;
+		width: 4vw;
+		height: 6vw;
+		top: 0vw;
+		left: 9vw;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.number-point-wrapper2 {
+		position: absolute;
+		width: 4vw;
+		height: 6vw;
+		top: 0vw;
+		left: 22vw;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.number-point {
+		position: relative;
+		width: 1vw;
+		height: 1vw;
+		border-radius: 50%;
+		background-color: #000000;
+		opacity: 1;
+	}
+
+	.number-point-breath {
+		animation: pointBreath 1s ease infinite;
+	}
+
+	@keyframes pointBreath {
+		0% {
+			opacity: 0.3;
+		}
+
+		50% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0.3;
+		}
+	}
+
+	.clock-container {
+		--clock: #d0d0d0;
+		position: absolute;
+		bottom: 1vw;
+		left: 0.6vw;
+		height: 5vw;
+		width: 5vw;
+	}
+
+	.clock-body {
+		position: absolute;
+		width: 3vw;
+		height: 3vw;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		/* box-sizing: border-box; */
+		border: 0.3vw solid var(--clock);
+	}
+
+	.clock-body-line1 {
+		position: absolute;
+		width: 0.4vw;
+		height: 1.2vw;
+		bottom: 50%;
+		left: 50%;
+		transform: translate(-50%, 0.2vw);
+		background-color: var(--clock);
+	}
+
+	.clock-body-line2 {
+		position: absolute;
+		width: 1.5vw;
+		height: 0.4vw;
+		bottom: 50%;
+		left: 50%;
+		transform: translate(-0.2vw, 50%);
+		background-color: var(--clock);
+	}
+
+	.clock-line1 {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0.3vw;
+		height: 0.8vw;
+		transform: translate(-1.2vw, 1.21vw) rotate(30deg);
+		background-color: var(--clock);
+	}
+
+	.clock-line2 {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0.3vw;
+		height: 0.8vw;
+		transform: translate(1vw, 1.2vw) rotate(-30deg);
+		background-color: var(--clock);
+	}
+
+	.clock-ear1 {
+		position: absolute;
+		width: 1.3vw;
+		height: 0.75vw;
+		top: 50%;
+		left: 50%;
+		transform: translate(-2vw, -2.2vw) rotate(-36deg);
+		background-color: var(--clock);
+		border-top-left-radius: 50%;
+		border-radius: 1.3vw 1.3vw 0 0;
+	}
+
+	.clock-ear2 {
+		position: absolute;
+		width: 1.3vw;
+		height: 0.75vw;
+		top: 50%;
+		left: 50%;
+		transform: translate(0.7vw, -2.2vw) rotate(36deg);
+		background-color: var(--clock);
+		border-top-left-radius: 50%;
+		border-radius: 1.3vw 1.3vw 0 0;
+	}
+
+	.clock-breath {
+		animation: clockBreath 1s ease infinite;
+	}
+
+	@keyframes clockBreath {
+		0% {
+			--clock: #d0d0d0;
+		}
+
+		50% {
+			--clock: #000000;
+		}
+
+		100% {
+			--clock: #d0d0d0;
+		}
+	}
+
+	.clock-light {
+		--clock: #000000;
+	}
+
+	.week-contaienr {
+		position: absolute;
+		width: 37vw;
+		height: 4vw;
+		top: 0.3vw;
+		left: 5vw;
+		font-size: 2.4vw;
+		color: #d0d0d0;
+		/* color: #000000; */
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.week-light {
+		color: #000000;
+	}
+
+	.week-one {
+		font-family: "one";
+	}
+
+	.week-two {
+		font-family: "one";
+	}
+
+	.week-three {
+		font-family: "one";
+	}
+
+	.week-four {
+		font-family: "one";
+	}
+
+	.week-five {
+		font-family: "one";
+	}
+
+	.week-six {
+		font-family: "one";
+	}
+
+	.week-seven {
+		font-family: "one";
+	}
+
+	.btn-contaienr {
+		position: absolute;
+		width: 10vw;
+		height: 10vw;
+		top: 50%;
+		left: 49vw;
+		transform: translateY(-50%);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.btn-alone {
+		position: relative;
+		width: 6vw;
+		height: 2vw;
+		background-color: #000000;
+		font-size: 1.5vw;
+		line-height: 2vw;
+		text-align: center;
+		box-shadow: -2px -2px 10px 2px gray inset;
+		border-radius: 0.5vw;
+	}
+
+	.number-breath {
+		animation: numberBreath 1s ease infinite;
+	}
+
+	@keyframes numberBreath {
+		0% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0.3;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
+	.screen-light {
+		position: absolute;
+		width: 47vw;
+		height: 15vw;
+		top: 0;
+		left: 0;
+		border-radius: 1.2vw;
+		box-shadow: -2px -2px 10px 2px gray inset;
+		overflow: hidden;
+		background: radial-gradient(#d54343cf, #c45059a1, #e9b3b885);
+		animation: screenLignt 1s infinite;
+	}
+
+	@keyframes screenLignt {
+		50% {
+			background: radial-gradient(#d5434390, #c4505970, #e9b3b860);
+		}
+	}
+
+	.frame-clock {
+		--move: 0vw;
+		animation: frameClock 0.2s infinite;
+	}
+
+	@keyframes frameClock {
+		0% {
+			transform: translate(calc(var(--move) - 0.5vw), calc(var(--move) - 0.5vw));
+		}
+
+		25% {
+			transform: translate(calc(var(--move) + 0.5vw), calc(var(--move) + 0.5vw));
+		}
+
+		50% {
+			transform: translate(calc(var(--move) + 0.5vw), calc(var(--move) - 0.5vw));
+		}
+
+		75% {
+			transform: translate(calc(var(--move) - 0.5vw), calc(var(--move) + 0.5vw));
+		}
+
+		100% {
+			transform: translate(calc(var(--move) - 0.5vw), calc(var(--move) - 0.5vw));
+		}
+	}
+
+	.frame-clock1 {
+		transform: translate(-5vw, -5vw);
+	}
+
+	.frame-clock2 {
+		transform: translate(5vw, 5vw);
+	}
+
+	.frame-clock3 {
+		transform: translate(10vw, -5vw);
+	}
+
+	.frame-clock4 {
+		transform: translate(10vw, 5vw);
+	}
+
+	.frame-clock5 {
+		transform: translate(-5vw, 5vw);
+	}
+
+	.clock-text {
+		position: absolute;
+		top: 5vw;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 4vw;
+		color: rgb(255, 255, 255);
+		font-family: "three";
+	}
+
+	.date-wrapper {
+		position: absolute;
+		top: 10vw;
+		left: 42.5vw;
+		font-size: 3.5vw;
+		color: #000000;
+		font-family: "two";
+		opacity: 0.4;
+	}
+
+	.date-light {
+		opacity: 1;
+	}
+</style>
+
+</html>
