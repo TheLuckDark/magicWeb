@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>火焰效果</title>
+	<!-- <link type="text/css" rel="stylesheet" href="./styles.css" /> -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="app" class="page" @click="refreshFire">
+		<div class="fire-wrapper burning">
+			<span class="particle" v-for="(item, index) in particlesArray"
+				:style="{ left: item.left, animationDelay:item.animationDelay}" :key="index"></span>
+		</div>
+		<div class="text">赤壁大战</div>
+	</div>
+</body>
+<script src="./jquery-1.12.4.js"></script>
+<script>
+	var app = new Vue({
+		el: "#app",
+		data: {
+			particlesArray: [],
+			particlesAlone: [],
+			total: 7,
+		},
+		mounted() {
+			for (let i = 0; i < this.total; i++) {
+				this.getParticles(this.getRandomInt(50, 60));
+			}
+		},
+		computed: {
+		},
+		methods: {
+			refreshFire() {
+				this.particlesArray = [];
+				this.particlesAlone = [];
+				for (let i = 0; i < this.total; i++) {
+					this.getParticles(this.getRandomInt(50, 60));
+				}
+			},
+			getRandomInt(s, e) {
+				return s + Math.round(Math.random() * (e - s));
+			},
+			getParticles(n) {
+				let xCenter = this.getRandomInt(0, 90);
+				for (let i = 0; i < n; ++i) {
+					let left, delay, radius;
+					radius = Math.random() > 0.3 ? 3 : 10;
+					left = (xCenter + Math.random() * radius) + "%";
+					delay = Math.random() + "s";
+					let particle = {
+						left: left,
+						animationDelay: delay,
+
+					}
+					this.particlesAlone.push(particle);
+				}
+				this.particlesArray = this.particlesArray.concat(this.particlesAlone);
+				this.particlesAlone = [];
+			},
+		},
+	});
+</script>
+<style>
+	@font-face {
+		font-family: fire;
+		src: url(fire.ttf);
+	}
+
+
+	body,
+	html,
+	p,
+	h1,
+	div,
+	span,
+	i,
+	b,
+	ul,
+	ol,
+	li {
+		margin: 0;
+		padding: 0;
+	}
+
+	ul,
+	ul,
+	li {
+		list-style: none;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	html {
+		font-size: 100px;
+	}
+
+	body {
+		color: white;
+		background-color: black;
+		font-family: Arial, "Microsoft YaHei", sans-serif;
+	}
+
+	html,
+	body {
+		width: 100%;
+		height: 100%;
+	}
+
+	.page {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		background-image: url(bg.jpg);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
+
+	.text {
+		font-family: "fire";
+		color: rgb(224, 82, 82);
+		font-size: 10vw;
+		transform: translateY(30vh);
+		filter: blur(0.06vw);
+		mix-blend-mode: hard-light;
+	}
+
+	.fire-wrapper {
+		position: absolute;
+		width: 40vw;
+		height: 16vw;
+		bottom: 6vw;
+		left: 30vw;
+	}
+
+	.particle {
+		position: absolute;
+		bottom: 0;
+		width: 3vw;
+		height: 3vw;
+		background-image: radial-gradient(#ff5000 20%, rgba(255, 80, 0, 0) 70%);
+		border-radius: 50%;
+		mix-blend-mode: screen;
+		opacity: 0;
+		left: 0;
+		animation: riseup 1s ease-in infinite;
+		transition: width 2s, height 2s;
+		filter: blur(0.06vw);
+		/* mix-blend-mode: hard-light; */
+	}
+
+	@keyframes riseup {
+		from {
+			opacity: 0;
+			transform: translateX(-50%) scale(1);
+			bottom: 0vw;
+		}
+
+		25% {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+			bottom: 10vw;
+			transform: translateX(-10%) scale(0);
+		}
+	}
+</style>
+
+</html>
