@@ -44,3 +44,10 @@
 
 [48.加载动画](https://theluckdark.github.io/magicWeb/48.%e5%8a%a0%e8%bd%bd%e5%8a%a8%e7%94%bb/index.html)
 
+[12.svg渐变](https://theluckdark.github.io/magicWeb/12.svg%e6%b8%90%e5%8f%98/vue.html)
+
+[29.电子钟](https://theluckdark.github.io/magicWeb/29.%e7%94%b5%e5%ad%90%e9%92%9f/vue.html)
+
+[36.火焰效果](https://theluckdark.github.io/magicWeb/36.%e7%81%ab%e7%84%b0%e6%95%88%e6%9e%9c/vue.html)
+
+
